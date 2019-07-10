@@ -1,0 +1,21 @@
+Unresolved - APMPlanner UPD comms not working with mavproxy
+
+#################################################################################################################
+Flight Gear
+###########
+  Setting up terrain:
+    - in .bashrc set FG_SCENERY env var to location of scenery files
+    - download terrain modules, dir structure should be
+            -Terrain
+              -Objects
+                -w90s30
+              -Terrain
+                -w90s30
+    - take the individual components from the downloaded zip file and place them into the object / terrain folder
+    - can use the whole parent directory (no need to take the individual coords and place them in)
+    
+###########
+  Adding vehicle models:
+    todo.
+  
+#################################################################################################################
