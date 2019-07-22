@@ -49,4 +49,9 @@ uint8_t RCInput::num_channels()
     return SITL_RC_INPUT_CHANNELS;
 }
 
+int16_t RCInput::get_rssi(void)
+{
+    return 127;
+}
+
 #endif
