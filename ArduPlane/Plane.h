@@ -51,6 +51,8 @@
 #include <AP_Stats/AP_Stats.h>     // statistics library
 #include <AP_Beacon/AP_Beacon.h>
 
+#include <AP_Foo/Foo.h> //Testing
+
 #include <AP_AdvancedFailsafe/AP_AdvancedFailsafe.h>
 #include <APM_Control/APM_Control.h>
 #include <APM_Control/AP_AutoTune.h>
@@ -95,7 +97,6 @@
 #include <AP_Gripper/AP_Gripper.h>
 #include <AP_Landing/AP_Landing.h>
 #include <AP_LandingGear/AP_LandingGear.h>     // Landing Gear library
-
 #include "GCS_Mavlink.h"
 #include "GCS_Plane.h"
 #include "quadplane.h"
@@ -218,6 +219,8 @@ private:
     AP_Int8 *flight_modes = &g.flight_mode1;
 
     AP_Baro barometer;
+    Foo foo;
+    
     Compass compass;
 
     AP_InertialSensor ins;
@@ -227,6 +230,9 @@ private:
     AP_Vehicle::FixedWing::Rangefinder_State rangefinder_state;
 
     AP_RPM rpm_sensor;
+
+
+
 
 // Inertial Navigation EKF
 #if AP_AHRS_NAVEKF_AVAILABLE
