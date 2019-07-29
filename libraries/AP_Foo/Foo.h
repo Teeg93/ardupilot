@@ -4,6 +4,7 @@
 #include <AP_HAL/AP_HAL.h>
 #include <GCS_MAVLink/GCS.h>
 #include <AP_GPS/AP_GPS.h>
+#include <AP_Baro/AP_Baro.h>
 
 
 class Foo
@@ -17,7 +18,9 @@ public:
 private:
 
 	uint32_t _loop_timer;
-	AP_GPS *_gps;
+	const AP_GPS &gps = AP::gps();
+	const AP_Baro &baro = AP::baro();
+	const Location *loc;
 };
 
 
