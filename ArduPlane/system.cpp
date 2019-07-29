@@ -412,7 +412,7 @@ void Plane::startup_INS_ground(void)
     //-----------------------------
     barometer.set_log_baro_bit(MASK_LOG_IMU);
     barometer.calibrate();
-    foo.init();
+    //foo.init();
 
     if (airspeed.enabled()) {
         // initialize airspeed sensor

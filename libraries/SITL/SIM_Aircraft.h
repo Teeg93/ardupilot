@@ -29,6 +29,7 @@
 #include "SIM_Parachute.h"
 #include "SIM_Precland.h"
 #include <Filter/Filter.h>
+#include <AP_Foo/Foo.h>
 
 namespace SITL {
 
@@ -252,6 +253,8 @@ private:
     uint32_t frame_counter = 0;
     uint32_t last_ground_contact_ms;
     const uint32_t min_sleep_time;
+    uint32_t _loop_timer;
+    uint16_t counter = 0;
 
     struct {
         bool enabled;
@@ -271,6 +274,7 @@ private:
     Gripper_EPM *gripper_epm;
     Parachute *parachute;
     SIM_Precland *precland;
+    Foo foo;
 };
 
 } // namespace SITL

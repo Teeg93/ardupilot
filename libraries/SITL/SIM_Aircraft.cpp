@@ -85,6 +85,7 @@ Aircraft::Aircraft(const char *home_str, const char *frame_str) :
     enum ap_var_type ptype;
     ahrs_orientation = (AP_Int8 *)AP_Param::find("AHRS_ORIENTATION", &ptype);
     terrain = reinterpret_cast<AP_Terrain *>(AP_Param::find_object("TERRAIN_"));
+    _loop_timer = time_now_us;
 }
 
 
@@ -359,6 +360,11 @@ double Aircraft::rand_normal(double mean, double stddev)
 */
 void Aircraft::fill_fdm(struct sitl_fdm &fdm)
 {
+
+
+    
+
+
     if (use_smoothing) {
         smooth_sensors();
     }
@@ -367,6 +373,27 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
         // initialise home
         fdm.home = home;
     }
+
+
+    if (time_now_us - _loop_timer > 10000000)
+    {
+        gcs().send_text(MAV_SEVERITY_INFO, "Loop Time: %d",time_now_us-_loop_timer);
+        foo.update_home(this->home);
+        foo.update_pos(this->position);
+        foo.update_loc(this->location);
+        foo.update_loc(this->smoothing.location);
+
+        if(counter > 10){
+            _loop_timer = time_now_us;      
+            counter = 0;         
+        } 
+        else{
+            counter ++;
+        }
+ 
+    }
+
+
     fdm.latitude  = location.lat * 1.0e-7;
     fdm.longitude = location.lng * 1.0e-7;
     fdm.altitude  = location.alt * 1.0e-2;

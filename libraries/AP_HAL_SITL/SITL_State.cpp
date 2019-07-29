@@ -369,6 +369,12 @@ void SITL_State::_fdm_input_local(void)
         hal.scheduler->stop_clock(AP_HAL::micros64()+100);
     }
 
+
+
+    //foo.update_sim(_sitl->state);
+
+
+
     set_height_agl();
 
     _synthetic_clock_mode = true;

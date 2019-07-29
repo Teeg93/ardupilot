@@ -25,6 +25,7 @@
 #include <SITL/SIM_ADSB.h>
 #include <SITL/SIM_Vicon.h>
 #include <AP_HAL/utility/Socket.h>
+#include <AP_Foo/Foo.h>
 
 class HAL_SITL;
 
@@ -82,6 +83,8 @@ public:
         "tcp:6",
     };
     
+    //Foo foo;
+
 private:
     void _parse_command_line(int argc, char * const argv[]);
     void _set_param_default(const char *parm);
@@ -104,6 +107,8 @@ private:
         double speedD;
         bool have_lock;
     };
+
+    uint32_t _loop_timer;
 
 #define MAX_GPS_DELAY 100
     gps_data _gps_data[MAX_GPS_DELAY];
