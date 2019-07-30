@@ -4,6 +4,9 @@ extern const AP_HAL::HAL &hal;
 
 Foo::Foo()
 {
+	_loc.lat = -34.8108693*1.0e7;
+	_loc.lng = 138.6383568*1.0e7;
+	_loc.alt = 50;
 }
 
 void Foo::init()
@@ -25,20 +28,80 @@ void Foo::loop()
 }
 void Foo::update_loc(Location &loc)
 {
-	loc.lat = -34.8108693*1.0e7;
-	loc.lng = 138.6383568*1.0e7;
+	l1 = rand()%283767;
+	l2 = rand()%329451;
+	l1 = -34.8127968+(l1*1e-7);
+	l2 = 138.6137445+(l2*1e-7);
+	_loc.lat = l1*1.0e7;
+	_loc.lng = l2*1.0e7;
+	_loc.alt = 50;
+	loc.lat = _loc.lat;
+	loc.lng = _loc.lng;
+	loc.alt = _loc.alt;
+}
+
+void Foo::update_loc_smooth(Location &loc)
+{
+	loc.lat = _loc.lat;
+	loc.lng = _loc.lng;
+	loc.alt = _loc.alt;
 }
 
 void Foo::update_home(Location &loc)
 {
-	loc.lat = -34.8108693*1.0e7;
-	loc.lng = 138.6383568*1.0e7;
+	loc.lat = _loc.lat;
+	loc.lng = _loc.lng;
+	loc.alt = 0.0;
 }
+
 void Foo::update_pos(Vector3f &pos)
 {
 	pos.x = 0;
 	pos.y = 0;
+	pos.z = -50;
 }
+
+void Foo::update_vel(Vector3f &vel)
+{
+	//Set a random speed in x direction, set y so that the total speed is 22m/s
+	_vel.x = 22 - rand()%45; //Speed ranges from -22m/s to + 22m/s
+
+	//Randomly make y +ve or -ve
+	if(rand()%10 > 5)
+	{
+		_ysign = 1.0;
+	}
+	else
+	{
+		_ysign = -1.0;
+	}
+
+	_vel.y = _ysign * sqrtf(22.0*22.0 - _vel.x*_vel.x);
+	_vel.z = 0.0;
+	_heading = degrees(atan2(_vel.y, _vel.x));
+	gcs().send_text(MAV_SEVERITY_INFO, "HEADING %.2f", _heading);
+
+
+	vel.x = _vel.x;
+	vel.y = _vel.y;
+	vel.z = _vel.z;
+
+}
+
+void Foo::update_vel_smooth(Vector3f &vel)
+{
+	vel.x = _vel.x;
+	vel.y = _vel.y;
+	vel.z = _vel.z;
+}
+
+void Foo::update_gyro(Vector3f &gyro)
+{
+	gyro.x = 0.0;
+	gyro.y = 0.0;
+	gyro.z = 0.0;
+}
+
 void Foo::print_gps()
 {
 	//_gps.update();

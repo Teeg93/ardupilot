@@ -360,11 +360,6 @@ double Aircraft::rand_normal(double mean, double stddev)
 */
 void Aircraft::fill_fdm(struct sitl_fdm &fdm)
 {
-
-
-    
-
-
     if (use_smoothing) {
         smooth_sensors();
     }
@@ -375,24 +370,28 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
     }
 
 
+    //ADDED IN FOR MONTE CARLO SIMULATION
+    
     if (time_now_us - _loop_timer > 10000000)
     {
         gcs().send_text(MAV_SEVERITY_INFO, "Loop Time: %d",time_now_us-_loop_timer);
-        foo.update_home(this->home);
+
         foo.update_pos(this->position);
-        foo.update_loc(this->location);
-        foo.update_loc(this->smoothing.location);
+        foo.update_loc(this->location); //THIS MUST BE CALLED FIRST
+        foo.update_loc_smooth(this->smoothing.location);
+        foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
+        foo.update_vel_smooth(this->smoothing.velocity_ef);
 
-        if(counter > 10){
-            _loop_timer = time_now_us;      
-            counter = 0;         
-        } 
-        else{
-            counter ++;
-        }
- 
+        foo.update_gyro(this->gyro); //SET GYRO READINGS TO 0
+        foo.update_gyro(this->smoothing.gyro);
+
+        foo.update_gyro(this->accel_body);
+        foo.update_gyro(this->smoothing.accel_body);
+        foo.update_home(this->home);
+        ground_level = 0.0;
+        _loop_timer = time_now_us;
     }
-
+    
 
     fdm.latitude  = location.lat * 1.0e-7;
     fdm.longitude = location.lng * 1.0e-7;
