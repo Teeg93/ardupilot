@@ -34,31 +34,26 @@ void Foo::update_loc(Location &loc)
 	l2 = 138.6137445+(l2*1e-7);
 	_loc.lat = l1*1.0e7;
 	_loc.lng = l2*1.0e7;
-	_loc.alt = 50;
 	loc.lat = _loc.lat;
 	loc.lng = _loc.lng;
-	loc.alt = _loc.alt;
 }
 
 void Foo::update_loc_smooth(Location &loc)
 {
 	loc.lat = _loc.lat;
 	loc.lng = _loc.lng;
-	loc.alt = _loc.alt;
 }
 
 void Foo::update_home(Location &loc)
 {
 	loc.lat = _loc.lat;
 	loc.lng = _loc.lng;
-	loc.alt = 0.0;
 }
 
 void Foo::update_pos(Vector3f &pos)
 {
 	pos.x = 0;
 	pos.y = 0;
-	pos.z = -50;
 }
 
 void Foo::update_vel(Vector3f &vel)
@@ -79,7 +74,7 @@ void Foo::update_vel(Vector3f &vel)
 	_vel.y = _ysign * sqrtf(22.0*22.0 - _vel.x*_vel.x);
 	_vel.z = 0.0;
 	_heading = degrees(atan2(_vel.y, _vel.x));
-	gcs().send_text(MAV_SEVERITY_INFO, "HEADING %.2f", _heading);
+	//gcs().send_text(MAV_SEVERITY_INFO, "HEADING %.2f", _heading);
 
 
 	vel.x = _vel.x;
@@ -102,6 +97,24 @@ void Foo::update_gyro(Vector3f &gyro)
 	gyro.z = 0.0;
 }
 
+void Foo::update_accel(Vector3f &accel)
+{
+	_accel.x = 0;
+	_accel.y = 0;
+	_accel.z = 9.8;
+
+	accel.x = _accel.x;
+	accel.y = _accel.y;
+	accel.z = _accel.z;
+}
+
+void Foo::update_accel_smooth(Vector3f &accel)
+{
+	accel.x = _accel.x;
+	accel.y = _accel.y;
+	accel.z = _accel.z;
+
+}
 void Foo::print_gps()
 {
 	//_gps.update();

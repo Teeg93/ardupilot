@@ -150,7 +150,7 @@ protected:
     uint8_t rcin_chan_count = 0;
     float rcin[8];
     float range = -1.0f;                 // rangefinder detection in m
-
+    bool _reset_trigger = false;
     struct {
         // data from simulated laser scanner, if available
         struct vector3f_array points;
@@ -193,6 +193,7 @@ protected:
     bool use_smoothing;
 
     AP_Terrain *terrain;
+    Foo foo;
     float ground_height_difference() const;
 
     const float FEET_TO_METERS = 0.3048f;
@@ -254,7 +255,7 @@ private:
     uint32_t last_ground_contact_ms;
     const uint32_t min_sleep_time;
     uint32_t _loop_timer;
-    uint16_t counter = 0;
+
 
     struct {
         bool enabled;
@@ -274,7 +275,7 @@ private:
     Gripper_EPM *gripper_epm;
     Parachute *parachute;
     SIM_Precland *precland;
-    Foo foo;
+    
 };
 
 } // namespace SITL

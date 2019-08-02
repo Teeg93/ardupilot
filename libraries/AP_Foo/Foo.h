@@ -21,6 +21,10 @@ public:
 	void update_vel(Vector3f &vel);
 	void update_vel_smooth(Vector3f &vel);
 	void update_gyro(Vector3f &gyro);
+	void update_accel(Vector3f &accel);
+	void update_accel_smooth(Vector3f &accel);
+
+	Vector3f _accel;
 	Location _loc;
 	Vector3f _vel;
 	float _heading;
