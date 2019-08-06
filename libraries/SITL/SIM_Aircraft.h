@@ -254,7 +254,7 @@ private:
     uint32_t frame_counter = 0;
     uint32_t last_ground_contact_ms;
     const uint32_t min_sleep_time;
-    uint32_t _loop_timer;
+    uint64_t _loop_timer;
 
 
     struct {

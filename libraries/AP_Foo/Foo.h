@@ -27,6 +27,8 @@ public:
 	Vector3f _accel;
 	Location _loc;
 	Vector3f _vel;
+	float _posx;
+	float _posy;
 	float _heading;
 
 private:

@@ -28,10 +28,16 @@ void Foo::loop()
 }
 void Foo::update_loc(Location &loc)
 {
-	l1 = rand()%283767;
-	l2 = rand()%329451;
-	l1 = -34.8127968+(l1*1e-7);
-	l2 = 138.6137445+(l2*1e-7);
+	int _sign = rand()%2;
+	if(_sign == 0)
+	{
+		_sign = -1;
+	}
+	l1 = rand()%3000;
+	l2 = rand()%3000;
+
+	l1 = -34.8037053+_sign*(l1*1e-7);
+	l2 = 138.6306810+_sign*(l2*1e-7);
 	_loc.lat = l1*1.0e7;
 	_loc.lng = l2*1.0e7;
 	loc.lat = _loc.lat;
@@ -52,14 +58,18 @@ void Foo::update_home(Location &loc)
 
 void Foo::update_pos(Vector3f &pos)
 {
-	pos.x = 0;
-	pos.y = 0;
+	_posx = rand()%4000 - 2000; 
+	_posy = rand()%4000 - 2000;
+
+	pos.x = _posx;
+	pos.y = _posy;
+
 }
 
 void Foo::update_vel(Vector3f &vel)
 {
 	//Set a random speed in x direction, set y so that the total speed is 22m/s
-	_vel.x = 22 - rand()%45; //Speed ranges from -22m/s to + 22m/s
+	_vel.x = 11 - rand()%23; //Speed ranges from -22m/s to + 22m/s
 
 	//Randomly make y +ve or -ve
 	if(rand()%10 > 5)
@@ -71,7 +81,7 @@ void Foo::update_vel(Vector3f &vel)
 		_ysign = -1.0;
 	}
 
-	_vel.y = _ysign * sqrtf(22.0*22.0 - _vel.x*_vel.x);
+	_vel.y = _ysign * sqrtf(11.0*11.0 - _vel.x*_vel.x);
 	_vel.z = 0.0;
 	_heading = degrees(atan2(_vel.y, _vel.x));
 	//gcs().send_text(MAV_SEVERITY_INFO, "HEADING %.2f", _heading);

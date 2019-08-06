@@ -374,12 +374,10 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
     
     if (time_now_us - _loop_timer > 100000000)
     {
-        gcs().send_text(MAV_SEVERITY_INFO, "Loop Time: %d",time_now_us-_loop_timer);
+        gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
 
-        foo.update_home(this->home);
         foo.update_pos(this->position);
-        foo.update_loc(this->location); //THIS MUST BE CALLED FIRST
-        foo.update_loc_smooth(this->smoothing.location);
+
         foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
         foo.update_vel_smooth(this->smoothing.velocity_ef);
 
@@ -416,9 +414,9 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
     fdm.rollRate  = degrees(gyro.x);
     fdm.pitchRate = degrees(gyro.y);
     fdm.yawRate   = degrees(gyro.z);
-    fdm.angAccel.x = degrees(ang_accel.x);
+    fdm.angAccel.x = 0; //degrees(ang_accel.x);
     fdm.angAccel.y = degrees(ang_accel.y);
-    fdm.angAccel.z = degrees(ang_accel.z);
+    fdm.angAccel.z = 0; //degrees(ang_accel.z);
     float r, p, y;
     dcm.to_euler(&r, &p, &y);
     fdm.rollDeg  = degrees(r);

@@ -63,7 +63,7 @@ int16_t RCInput::get_rssi(void)
     _Pr = 4*((_Pt*_Gt*_Gr*_lambda*_lambda)/((4*PI*_d)*(4*PI*_d)))*sin((2*PI*_ht*_hr)/(_d*_lambda))*sin((2*PI*_ht*_hr)/(_d*_lambda));
     _PdB = 10*log10(_Pr)+30;
 
-    _buff = (100+_PdB)*2;
+    _buff = (100+_PdB)*4;
     if(_buff > 255)
     {
         _RSSI = 255;
