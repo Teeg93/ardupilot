@@ -40,7 +40,7 @@ private:
     float PI = 3.141596;
     float _PdB;
 
-    float _buff;
+    int16_t _buff;
     int16_t _RSSI;
 };
 

@@ -371,35 +371,43 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
 
 
     //ADDED IN FOR MONTE CARLO SIMULATION
-    
-    if (time_now_us - _loop_timer > 100000000)
+    ///*
+
+    int _sim_type = 0;
+
+
+    if (_sim_type==1)
     {
-        gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
+        if (time_now_us - _loop_timer > 100000000)
+        {
+            gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
 
-        foo.update_pos(this->position);
+            foo.update_pos(this->position);
 
-        foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
-        foo.update_vel_smooth(this->smoothing.velocity_ef);
+            foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
+            foo.update_vel_smooth(this->smoothing.velocity_ef);
 
-        foo.update_gyro(this->gyro_prev);
-        foo.update_gyro(this->gyro); //SET GYRO READINGS TO 0
-        foo.update_gyro(this->smoothing.gyro);
-        foo.update_gyro(this->ang_accel);
+            foo.update_gyro(this->gyro_prev);
+            foo.update_gyro(this->gyro); //SET GYRO READINGS TO 0
+            foo.update_gyro(this->smoothing.gyro);
+            foo.update_gyro(this->ang_accel);
 
-        foo.update_accel(this->accel_body);
-        foo.update_accel_smooth(this->smoothing.accel_body);
-        velocity_air_ef = velocity_ef;
+            foo.update_accel(this->accel_body);
+            foo.update_accel_smooth(this->smoothing.accel_body);
+            velocity_air_ef = velocity_ef;
 
-        dcm.from_euler(0, -0.05, atan2(velocity_ef.y, velocity_ef.x));
-        ground_level = 0.0;
+            dcm.from_euler(0, -0.05, atan2(velocity_ef.y, velocity_ef.x));
+            ground_level = 0.0;
 
-        _reset_trigger = true;
-        _loop_timer = time_now_us;          
+            _reset_trigger = true;
+            _loop_timer = time_now_us;          
+        }
+        else
+        {
+            _reset_trigger = false;
+        }
     }
-    else
-    {
-        _reset_trigger = false;
-    }
+    //*/
 
     fdm.latitude  = location.lat * 1.0e-7;
     fdm.longitude = location.lng * 1.0e-7;

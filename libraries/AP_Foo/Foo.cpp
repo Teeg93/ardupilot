@@ -1,4 +1,5 @@
 #include <AP_Foo/Foo.h>
+#include <ctime>
 
 extern const AP_HAL::HAL &hal;
 
@@ -7,13 +8,16 @@ Foo::Foo()
 	_loc.lat = -34.8108693*1.0e7;
 	_loc.lng = 138.6383568*1.0e7;
 	_loc.alt = 50;
+	srand(time(NULL));
 }
 
 void Foo::init()
 {
+
 	_loop_timer=AP_HAL::millis();
 	gcs().send_text(MAV_SEVERITY_INFO, "G'DAY MATE");
 	hal.scheduler->register_timer_process(FUNCTOR_BIND(this, &Foo::loop, void));
+
 }
 
 void Foo::loop()
@@ -58,8 +62,12 @@ void Foo::update_home(Location &loc)
 
 void Foo::update_pos(Vector3f &pos)
 {
-	_posx = rand()%4000 - 2000; 
-	_posy = rand()%4000 - 2000;
+	float _range = rand()%10001; //0 to 10000m range
+	float _theta = rand()%360;  //0 to 359 degrees theta
+
+	_theta = _theta * (3.14159265359/180.0); //convert to radians
+	_posx = _range*cos(_theta);
+	_posy = _range*sin(_theta);
 
 	pos.x = _posx;
 	pos.y = _posy;
@@ -69,7 +77,7 @@ void Foo::update_pos(Vector3f &pos)
 void Foo::update_vel(Vector3f &vel)
 {
 	//Set a random speed in x direction, set y so that the total speed is 22m/s
-	_vel.x = 11 - rand()%23; //Speed ranges from -22m/s to + 22m/s
+	_vel.x = 11 - rand()%23; //Speed ranges from -11m/s to + 11m/s
 
 	//Randomly make y +ve or -ve
 	if(rand()%10 > 5)
