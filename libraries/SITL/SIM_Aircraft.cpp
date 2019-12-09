@@ -372,13 +372,87 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
 
     //ADDED IN FOR MONTE CARLO SIMULATION
     ///*
-
-    int _sim_type = 0;
+    // 0 = No Reset
+    // 1 = Monte Carlo with 100s reset
+    // 2 = Monte Carlo with 1km to home reset
+    // 3 = Monte Carlo with 5000s reset
+    int _sim_type = 3;
 
 
     if (_sim_type==1)
     {
-        if (time_now_us - _loop_timer > 100000000)
+        if (time_now_us - _loop_timer > 100000000) //100 seconds, for generating data
+        {
+            gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
+
+            foo.update_pos(this->position);
+
+            foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
+            foo.update_vel_smooth(this->smoothing.velocity_ef);
+
+            foo.update_gyro(this->gyro_prev);
+            foo.update_gyro(this->gyro); //SET GYRO READINGS TO 0
+            foo.update_gyro(this->smoothing.gyro);
+            foo.update_gyro(this->ang_accel);
+
+            foo.update_accel(this->accel_body);
+            foo.update_accel_smooth(this->smoothing.accel_body);
+            velocity_air_ef = velocity_ef;
+
+            dcm.from_euler(0, -0.05, atan2(velocity_ef.y, velocity_ef.x));
+            ground_level = 0.0;
+
+            _reset_trigger = true;
+            _loop_timer = time_now_us;          
+        }
+        else
+        {
+            _reset_trigger = false;
+        }
+    }
+
+    if (_sim_type==2)
+    {
+        float _range_to_home = 999999;
+
+        if ((time_now_us - _loop_timer) > 100000000)
+        {
+            _range_to_home = sqrtf(this->position.x*this->position.x+this->position.y*this->position.y);       
+        }
+
+
+        if (_range_to_home < 1000.0) //if we get within 500m of home, reset
+        {
+            gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
+
+            foo.update_pos(this->position);
+
+            foo.update_vel(this->velocity_ef); //CALL THIS BEFORE SMOOTH
+            foo.update_vel_smooth(this->smoothing.velocity_ef);
+
+            foo.update_gyro(this->gyro_prev);
+            foo.update_gyro(this->gyro); //SET GYRO READINGS TO 0
+            foo.update_gyro(this->smoothing.gyro);
+            foo.update_gyro(this->ang_accel);
+
+            foo.update_accel(this->accel_body);
+            foo.update_accel_smooth(this->smoothing.accel_body);
+            velocity_air_ef = velocity_ef;
+
+            dcm.from_euler(0, -0.05, atan2(velocity_ef.y, velocity_ef.x));
+            ground_level = 0.0;
+
+            _reset_trigger = true;         
+        }
+        else
+        {
+            _reset_trigger = false;
+        }
+    }
+
+    if (_sim_type==3)
+    {
+        if (time_now_us - _loop_timer > 5000000000) //5000 seconds (50km) for testing convergence
         {
             gcs().send_text(MAV_SEVERITY_INFO, "POSITION_RESET");
 
