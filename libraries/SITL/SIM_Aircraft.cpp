@@ -376,7 +376,7 @@ void Aircraft::fill_fdm(struct sitl_fdm &fdm)
     // 1 = Monte Carlo with 100s reset
     // 2 = Monte Carlo with 1km to home reset
     // 3 = Monte Carlo with 5000s reset
-    int _sim_type = 3;
+    int _sim_type = 2;
 
 
     if (_sim_type==1)

@@ -62,7 +62,7 @@ void Foo::update_home(Location &loc)
 
 void Foo::update_pos(Vector3f &pos)
 {
-	float _range = 1; // rand()%10001; //0 to 10000m range
+	float _range = rand()%10001; //0 to 10000m range
 	float _theta = rand()%360;  //0 to 359 degrees theta
 
 	_theta = _theta * (3.14159265359/180.0); //convert to radians
